@@ -1,4 +1,4 @@
-# RaceDay --- Programming POE Part 2
+<img width="1917" height="887" alt="RaceDAY TESTS" src="https://github.com/user-attachments/assets/629a5067-4b81-4035-a045-8388664c851e" /># RaceDay --- Programming POE Part 2
 
 ## 1. Project Overview
 
@@ -286,6 +286,12 @@ This repository contains the Part 2 implementation, including:
 -   Automated xUnit tests.
 -   Solution and project files for opening and running the application
     in Visual Studio.
+
+YOUTUBE LINK: https://youtu.be/YtksG9aRuuQ
+TESTS IMAGE:
+<img width="1917" height="861" alt="image" src="https://github.com/user-attachments/assets/10de4beb-556f-461f-a1db-d7fc9ce8970a" />
+
+
 
 ## 12. Author
 
