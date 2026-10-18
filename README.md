@@ -248,11 +248,11 @@ RaceDay/
 └── README.md
 
 CI/CD Check Result
-<img width="1887" height="697" alt="CI" src="https://github.com/user-attachments/assets/15f02ff0-9ed6-49c0-957c-f0dac6375980" />
 
 
 
-Youtube: https://youtu.be/shMkz-KFS4w
+
+Youtube:
 
 ## Part 1 Deliverables
 
