@@ -1,276 +1,293 @@
-## Part 1 — Programming POE
-
-RaceDay is a web-based race event management system designed to manage users, race events, event types, categories, enrolments and race results.
-
-This repository contains the Part 1 work for the RaceDay Programming POE, including the Entity Relationship Diagram (ERD), SQL database script and API endpoint plan.
-
-## Project Overview
-
-The RaceDay system is designed to support the management of race events and the people involved in those events.
-
-The database stores information about:
-
-* System users
-* Race events
-* Event types
-* Event categories
-* Participant enrolments
-* Race results
-
-The database uses primary keys and foreign keys to connect the different entities and maintain relationships between the data.
-
-## Database Entities
-
-The RaceDay database contains the following six main tables:
-
-### 1. AppUser
-
-The AppUser table stores information about users of the system.
-
-Users can have different roles, such as Organiser or Participant.
-
-**Primary Key:**UserID
-
-Main attributes include:
-
-* UserID
-* UserName
-* UserSurname
-* Email
-* PasswordHash
-* Role
-* PhoneNumber
-
-### 2. EventType
-
-The EventType table stores the different types of events, such as Run, Walk and Cycle.
-
-**Primary Key:** EventTypeID
-
-Main attribute:
-
-* TypeName
-
-### 3. Event
-
-The Event table stores information about individual race events.
-
-**Primary Key:** EventID
-
-**Foreign Keys:**
-
-* EventTypeID → EventType(EventTypeID)
-* UserID → AppUser(UserID)
-
-Main attributes include:
-
-* EventID
-* EventName
-* Description
-* EventDate
-* EventLocation
-* Distance
-* EventTypeID
-* UserID
-
-### 4. Category
-
-The Category table stores categories for events. Categories can represent different age groups or race divisions.
-
-**Primary Key:** CategoryID
-
-**Foreign Key:**
-
-* EventID → Event(EventID)
-
-Main attributes include:
-
-* CategoryID
-* CategoryName
-* Description
-* Age
-* Distance
-* EventID
-
-### 5. Enrolment
-
-The Enrolment table records users who enrol for events and the category they enter.
-
-**Primary Key:** EnrolmentID
-
-**Foreign Keys:**
-
-* EventID → Event(EventID)
-* CategoryID` → Category(CategoryID)
-* UserID → AppUser(UserID)
-
-Main attributes include:
-
-* EnrolmentID
-* EnrolmentDate
-* Status
-* EventID
-* CategoryID
-* UserID
-
-### 6. Result
-
-The Result table stores the performance of an enrolled participant after an event.
-
-**Primary Key:** ResultID
-
-**Foreign Keys:**
-
-* EnrolmentID → Enrolment(EnrolmentID)
-* EventID → Event(EventID)
-
-Main attributes include:
-
-* ResultID
-* FinishTime
-* FinishPosition
-* PublishedDate
-* TotalPosition
-* EnrolmentID
-* EventID
-
-## Entity Relationships
-
-The main relationships in the RaceDay database are:
-
-* One **AppUser** can organise many **Events**.
-* One **EventType** can be associated with many **Events**.
-* One **Event** belongs to one **EventType**.
-* One **Event** is associated with one organising **AppUser**.
-* One **Event** can have many **Categories**.
-* One **Category** belongs to one **Event**.
-* One **AppUser** can have many **Enrolments**.
-* One **Event** can have many **Enrolments**.
-* One **Category** can be selected by many **Enrolments**.
-* One **Enrolment** belongs to one **AppUser**, one **Event** and one **Category**.
-* One **Enrolment** can have a corresponding **Result**.
-* One **Event** can be associated with many **Results**.
-
-## Entity Relationship Diagram
-
-The Entity Relationship Diagram shows the database entities, attributes, primary keys, foreign keys and relationships.
-
-The ERD is available in the repository:
-
--RACEDAY.ERD (1).png
-
-## SQL Database
-
-The SQL script creates the RaceDay database and its tables.
-
-The database created by the script is:
-
--RaceDayDb
-
-The SQL script includes:
-
-* Database creation
-* Table creation
-* Primary keys
-* Foreign keys
-* Relationships
-* Sample data
-
-The SQL file is located in:
-
--Docs/RaceDaySQL.sql
-
-### Running the Database
-
-To run the database:
-
-1. Open **SQL Server Management Studio (SSMS)**.
-2. Open Docs/RaceDaySQL.sql.
-3. Execute the script.
-4. Refresh the Databases section.
-5. Confirm that RaceDayDb has been created.
-6. Expand the database and check that the six tables have been created.
-
-## API Endpoint Plan
-
-The API endpoint plan describes how the RaceDay application will communicate with the system's data through REST API endpoints.
-
-The API documentation is provided in:
-
--Docs/RaceDay API Endpoint Plan.pdf
-
-The planned API covers the main RaceDay resources and provides endpoints for working with the system data.
-
-## Sample Data
-
-The SQL script includes sample data for testing the database.
-
-The sample data includes:
-
-* Organisers
-* Participants
-* Event types
-* Race events
-* Event categories
-* Enrolments
-* Race results
-
-Example event types include:
-
-* Run
-* Walk
-* Cycle
-
-## Technologies and Tools
-
-The following technologies and tools are used for the Part 1 work:
-
-* Microsoft SQL Server
-* SQL
-* SQL Server Management Studio
-* Visual Studio
-* GitHub
-* diagrams.net / draw.io
-* REST API design
-* Markdown
-
-## Repository Structure
-
-
-RaceDay/
-│
-├── Docs/
-│   ├── RaceDay API Endpoint Plan.pdf
-│   └── RaceDaySQL.sql
-│
-├── RACEDAY.ERD (1).png
-│
+# RaceDay --- Programming POE Part 2
+
+## 1. Project Overview
+
+RaceDay is a REST API for a race event management system. It supports
+race organisers who create and manage events, and participants who
+browse events, enrol in race categories, and view their results.
+
+Part 2 develops the planned system into a working ASP.NET Core Web API
+connected to a database. It includes session-based authentication,
+role-based access control, database operations, API documentation, and
+automated tests.
+
+## 2. Main Features
+
+-   Register and log in as an **Organiser** or **Participant**.
+-   Log out and manage an authenticated session.
+-   View and update a user's profile.
+-   Upload a profile picture.
+-   Browse race events and view event details.
+-   Allow organisers to create, update, view and delete their events.
+-   Allow organisers to create, update and delete event categories.
+-   Allow participants to enrol in events and view or cancel their own
+    enrolments.
+-   Allow organisers to view enrolments for their events.
+-   Allow organisers to capture and update race results.
+-   Allow participants to view their own results.
+-   Test API behaviour and access permissions using automated tests.
+
+## 3. Technologies Used
+
+-   C#
+-   ASP.NET Core Web API (.NET 8)
+-   Entity Framework Core 8
+-   Microsoft SQL Server / LocalDB
+-   Swagger / OpenAPI
+-   xUnit
+-   ASP.NET Core integration testing
+-   Visual Studio
+-   Git and GitHub
+
+## 4. Project Structure
+
+``` text
+PROG6212PART2-master/
+├── RaceDay.Api/
+│   ├── Controllers/       # API endpoints for authentication, users, events,
+│   │                      # categories, enrolments and results
+│   ├── Data/              # Entity Framework database context
+│   ├── Dtos/              # Request and response objects used by the API
+│   ├── Models/            # Database entity models
+│   ├── Security/          # Password hashing, session authorisation and helpers
+│   ├── wwwroot/           # Static files and uploaded profile pictures
+│   ├── Program.cs         # Application setup and middleware configuration
+│   ├── appsettings.json   # Connection string and application settings
+│   └── RaceDay.Api.csproj
+├── RaceDay.Tests/
+│   ├── AuthTests.cs
+│   ├── EnrolmentTests.cs
+│   ├── EventTests.cs
+│   ├── ResultTests.cs
+│   ├── RoleEnforcementTests.cs
+│   └── TestSupport.cs
+├── RaceDay.sln
 └── README.md
+```
 
-CI/CD Check Result
+## 5. Requirements
 
+Before running the project, make sure you have:
 
+1.  Visual Studio 2022 or a compatible IDE with the **.NET 8 SDK**
+    installed.
+2.  Microsoft SQL Server LocalDB installed, or access to a SQL Server
+    instance.
+3.  NuGet package restore enabled so the solution can download its
+    dependencies.
 
+## 6. Database Configuration
 
-Youtube:
+The API uses Entity Framework Core with SQL Server. The default
+connection string is configured in:
 
-## Part 1 Deliverables
+`RaceDay.Api/appsettings.json`
 
-The repository contains the following Part 1 deliverables:
+The current default connection string uses SQL Server LocalDB and
+creates or connects to a database named `RaceDayDb`.
 
-* Entity Relationship Diagram (ERD)
-* Database design
-* Primary keys
-* Foreign keys
-* Entity relationships
-* SQL database script
-* Sample database data
-* API endpoint plan
-* GitHub repository documentation
-* Video link
+If your computer uses a different SQL Server instance, update the
+`ConnectionStrings:RaceDayDb` setting before running the API. For
+example, change the server part of the connection string to match your
+installed SQL Server instance.
 
-## Author
+On startup, the application checks the database. It applies migrations
+if migrations are present; otherwise, it creates the database from the
+Entity Framework model when needed.
 
-**Mmabatho Vilakazi**
+The application model includes these main entities:
 
-**RaceDay — Programming POE Part 1**
+-   `AppUser`
+-   `EventType`
+-   `Event`
+-   `Category`
+-   `Enrolment`
+-   `Result`
+
+The event types **Run**, **Walk** and **Cycle** are configured as
+initial data in the model.
+
+### Organiser registration code
+
+Organiser registration checks the `Registration:OrganiserCode` setting
+in `appsettings.json`. Configure this value for your own local
+environment and do not publish real secrets in a public repository.
+
+## 7. How to Run the API
+
+1.  Download or clone this repository.
+2.  Open `RaceDay.sln` in Visual Studio.
+3.  Allow Visual Studio to restore the NuGet packages.
+4.  Check the database connection string in
+    `RaceDay.Api/appsettings.json`.
+5.  Set **RaceDay.Api** as the startup project.
+6.  Build the solution.
+7.  Run the project.
+
+When the API starts, Swagger UI is configured at:
+
+`/swagger`
+
+If you are running the project locally, open the Swagger address shown
+in the browser or in Visual Studio's output. The root address is
+configured to redirect to Swagger.
+
+## 8. Using the API in Swagger
+
+Swagger provides an interactive page for viewing and trying the API
+endpoints.
+
+### Authentication
+
+1.  Open Swagger.
+2.  Use `POST /api/auth/register` to create an account.
+3.  To register as an Organiser, provide the configured organiser
+    registration code.
+4.  Use `POST /api/auth/login` with the registered email and password.
+5.  The API uses a session cookie to maintain the login. When testing in
+    the same Swagger/browser session, keep using that session for
+    protected requests.
+6.  Use `POST /api/auth/logout` to end the session.
+
+### Main endpoints
+
+  ----------------------------------------------------------------------------------------
+  Method                  Endpoint                                 Purpose / access
+  ----------------------- ---------------------------------------- -----------------------
+  POST                    `/api/auth/register`                     Register an account
+
+  POST                    `/api/auth/login`                        Log in
+
+  POST                    `/api/auth/logout`                       Log out; requires a
+                                                                   session
+
+  GET                     `/api/users/me`                          View the current user's
+                                                                   profile; requires a
+                                                                   session
+
+  PUT                     `/api/users/me`                          Update the current
+                                                                   user's profile;
+                                                                   requires a session
+
+  PUT                     `/api/users/me/profile-picture`          Upload a profile
+                                                                   picture; requires a
+                                                                   session
+
+  GET                     `/api/events`                            Browse events
+
+  GET                     `/api/events/{id}`                       View an event
+
+  POST                    `/api/events`                            Create an event;
+                                                                   Organiser only
+
+  PUT                     `/api/events/{id}`                       Update an event;
+                                                                   Organiser only
+
+  DELETE                  `/api/events/{id}`                       Delete an event;
+                                                                   Organiser only
+
+  GET                     `/api/events/mine`                       View events managed by
+                                                                   the logged-in Organiser
+
+  GET                     `/api/events/{eventId}/categories`       View an event's
+                                                                   categories
+
+  POST                    `/api/events/{eventId}/categories`       Add a category;
+                                                                   Organiser only
+
+  PUT                     `/api/categories/{id}`                   Update a category;
+                                                                   Organiser only
+
+  DELETE                  `/api/categories/{id}`                   Delete a category;
+                                                                   Organiser only
+
+  POST                    `/api/events/{eventId}/enrolments`       Enrol in an event;
+                                                                   Participant only
+
+  GET                     `/api/enrolments/mine`                   View the logged-in
+                                                                   Participant's
+                                                                   enrolments
+
+  GET                     `/api/events/{eventId}/enrolments`       View enrolments for an
+                                                                   event; Organiser only
+
+  DELETE                  `/api/enrolments/{id}`                   Cancel an enrolment;
+                                                                   Participant only
+
+  POST                    `/api/enrolments/{enrolmentId}/result`   Capture a result;
+                                                                   Organiser only
+
+  PUT                     `/api/results/{id}`                      Update a result;
+                                                                   Organiser only
+
+  GET                     `/api/results/mine`                      View the logged-in
+                                                                   Participant's results
+
+  GET                     `/api/events/{eventId}/results`          View results for an
+                                                                   event; Organiser only
+  ----------------------------------------------------------------------------------------
+
+**Note:** Protected endpoints require an active session. Organiser-only
+and Participant-only endpoints also check the user's role.
+
+## 9. Authentication and Security
+
+-   Passwords are hashed before being stored; the plain-text password is
+    not returned by the API.
+-   Login creates a server-side session that stores the user's ID and
+    role.
+-   Logout clears the current session.
+-   Session-protected endpoints reject requests without an authenticated
+    session.
+-   Role checks prevent Participants from using Organiser-only functions
+    and Organisers from using Participant-only functions.
+-   Organiser registration uses a configurable registration code.
+
+For deployment beyond a local development environment, review the
+database connection string, organiser registration code, HTTPS settings,
+session configuration, and other environment-specific security settings.
+Do not commit production credentials or secrets to GitHub.
+
+## 10. Running the Automated Tests
+
+The solution includes the `RaceDay.Tests` project, which uses xUnit and
+ASP.NET Core integration testing.
+
+To run the tests in Visual Studio:
+
+1.  Open `RaceDay.sln`.
+2.  Build the solution.
+3.  Open **Test \> Test Explorer**.
+4.  Select **Run All Tests**.
+
+Alternatively, open a terminal in the folder containing `RaceDay.sln`
+and run:
+
+``` bash
+dotnet test
+```
+
+The tests cover areas including authentication, event operations,
+enrolments, results, and role-based access restrictions. The test
+project uses an in-memory database for its API tests, so those tests do
+not need to use the local SQL Server database.
+
+## 11. Part 2 Deliverables
+
+This repository contains the Part 2 implementation, including:
+
+-   ASP.NET Core REST API.
+-   Entity Framework Core data access and entity configuration.
+-   Authentication and session handling.
+-   Organiser and Participant role-based access control.
+-   Endpoints for user profiles, events, categories, enrolments and
+    results.
+-   Swagger API documentation.
+-   Automated xUnit tests.
+-   Solution and project files for opening and running the application
+    in Visual Studio.
+
+## 12. Author
+
+**Mmabatho Vilakazi**\
+**RaceDay --- Programming POE Part 2**
