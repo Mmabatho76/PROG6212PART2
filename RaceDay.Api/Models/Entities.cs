@@ -1,6 +1,6 @@
 namespace RaceDay.Api.Models;
 
-/// <summary>System user (Organiser or Participant). Matches the AppUser table from Part 1.</summary>
+
 public class AppUser
 {
     public int UserID { get; set; }
