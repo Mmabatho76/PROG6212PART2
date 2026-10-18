@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDay.Api.Data;
@@ -42,10 +41,8 @@ public class AuthController : ApiControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var role = RoleNames.Normalize(request.Role); // Converts the submitted role into the application's standard role format. 
-                                                      // If the role is not recognised, Normalize returns null.
-
-        if (role is null) // Reject the request if the user selected an unsupported role.
+        var role = RoleNames.Normalize(request.Role);
+        if (role is null)
             return BadRequest(new ErrorResponse("Role must be either 'Organiser' or 'Participant'."));
 
         if (!NameHelper.TrySplit(request.FullName, out var name, out var surname))
@@ -59,7 +56,7 @@ public class AuthController : ApiControllerBase
                     new ErrorResponse("A valid organiserCode is required to register as an Organiser."));
         }
 
-        var email = request.Email.Trim().ToLowerInvariant(); // Remove unnecessary spaces and convert the email to lowercase.
+        var email = request.Email.Trim().ToLowerInvariant();
         if (await _db.AppUsers.AnyAsync(u => u.Email == email))
             return Conflict(new ErrorResponse("An account with this email already exists."));
 
@@ -125,4 +122,3 @@ public class AuthController : ApiControllerBase
         PhoneNumber = u.PhoneNumber
     };
 }
-
